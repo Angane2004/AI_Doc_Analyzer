@@ -5,8 +5,6 @@ import toast from 'react-hot-toast';
 import { 
   Upload, 
   FileText, 
-  AlertCircle, 
-  CheckCircle, 
   Download,
   Eye,
   Brain,
@@ -14,8 +12,8 @@ import {
   Clock,
   X
 } from 'lucide-react';
-import { uploadDocument, uploadWithProgress } from '../services/api';
-import { Document, UploadProgress } from '../types';
+import { uploadWithProgress } from '../services/api';
+import { Document } from '../types';
 import AnalysisResults from '../components/AnalysisResults';
 
 const DocumentAnalysis: React.FC = () => {
@@ -23,7 +21,6 @@ const DocumentAnalysis: React.FC = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [analysisResult, setAnalysisResult] = useState<Document | null>(null);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const navigate = useNavigate();
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -49,7 +46,6 @@ const DocumentAnalysis: React.FC = () => {
     if (!uploadedFile) return;
 
     setIsUploading(true);
-    setIsAnalyzing(true);
     setUploadProgress(0);
 
     try {
@@ -64,7 +60,6 @@ const DocumentAnalysis: React.FC = () => {
       toast.error(error.response?.data?.error || 'Failed to upload document');
     } finally {
       setIsUploading(false);
-      setIsAnalyzing(false);
     }
   };
 

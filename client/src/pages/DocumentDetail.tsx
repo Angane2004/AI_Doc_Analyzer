@@ -16,7 +16,7 @@ const DocumentDetail: React.FC = () => {
     if (id) {
       fetchDocument();
     }
-  }, [id]);
+  }, [id, fetchDocument]);
 
   const fetchDocument = async () => {
     try {

@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import { 
   AlertTriangle, 
-  CheckCircle, 
-  Clock, 
   DollarSign, 
   Mail, 
-  MapPin, 
   Phone, 
   User, 
   Building, 
@@ -48,10 +45,6 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({ document }) => {
       case 'negative': return <TrendingDown className="w-4 h-4 text-red-600" />;
       default: return <Minus className="w-4 h-4 text-gray-600" />;
     }
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString();
   };
 
   return (

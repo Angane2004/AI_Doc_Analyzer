@@ -8,11 +8,9 @@ import {
   Download, 
   Trash2, 
   FileText, 
-  Calendar,
   AlertTriangle,
   CheckCircle,
-  Clock,
-  BarChart3
+  Clock
 } from 'lucide-react';
 import { getAllDocuments, deleteDocument, getDocumentStats, downloadReport } from '../services/api';
 import { Document, DocumentStats } from '../types';

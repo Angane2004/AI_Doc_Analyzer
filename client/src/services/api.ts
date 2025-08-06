@@ -4,7 +4,6 @@ import {
   UploadResponse, 
   Comparison, 
   DocumentStats, 
-  AnalysisHistory,
   ApiError 
 } from '../types';
 

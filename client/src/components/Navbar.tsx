@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { 
   FileText, 
   Upload, 
-  BarChart3, 
   GitCompare, 
   Menu, 
   X,

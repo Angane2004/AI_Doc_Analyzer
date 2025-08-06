@@ -4,17 +4,10 @@ import toast from 'react-hot-toast';
 import { 
   Upload, 
   GitCompare, 
-  FileText, 
-  AlertTriangle, 
-  CheckCircle,
-  Clock,
   BarChart3,
-  Download,
   X,
   Brain,
-  Shield,
-  TrendingUp,
-  TrendingDown
+  Shield
 } from 'lucide-react';
 import { uploadMultipleDocuments, compareDocuments, getAllDocuments } from '../services/api';
 import { Document, Comparison as ComparisonType } from '../types';
@@ -26,7 +19,6 @@ const Comparison: React.FC = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [isComparing, setIsComparing] = useState(false);
   const [comparisonResult, setComparisonResult] = useState<ComparisonType | null>(null);
-  const [uploadProgress, setUploadProgress] = useState<number>(0);
 
   useEffect(() => {
     fetchExistingDocuments();
@@ -59,7 +51,6 @@ const Comparison: React.FC = () => {
     if (uploadedFiles.length === 0) return;
 
     setIsUploading(true);
-    setUploadProgress(0);
 
     try {
       const result = await uploadMultipleDocuments(uploadedFiles);
@@ -73,7 +64,6 @@ const Comparison: React.FC = () => {
       toast.error(error.response?.data?.error || 'Failed to upload documents');
     } finally {
       setIsUploading(false);
-      setUploadProgress(0);
     }
   };
 
