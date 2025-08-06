@@ -1,37 +1,8 @@
 {
-  "version": 2,
   "builds": [
-    {
-      "src": "client/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "build",
-        "cleanUrls": true
-      }
-    }
+    { "src": "client/package.json", "use": "@vercel/static-build", "config": { "distDir": "build" } }
   ],
   "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/static/(.*)",
-      "dest": "client/build/static/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "client/build/index.html"
-    },
-    { "src": "/old", "dest": "/new" },
-    { "src": "/blog", "headers": { "Cache-Control": "max-age=3600" } }
-  ],
-
-  
-  "cleanUrls": true,
-  "trailingSlash": false,
-  "rewrites": [
-    { "source": "/old", "destination": "/new" }
+    { "src": "/(.*)", "dest": "client/build/$1" }
   ]
-
 }
