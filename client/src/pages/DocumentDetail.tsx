@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Download, FileText } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -12,13 +12,7 @@ const DocumentDetail: React.FC = () => {
   const [document, setDocument] = useState<Document | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (id) {
-      fetchDocument();
-    }
-  }, [id, fetchDocument]);
-
-  const fetchDocument = async () => {
+  const fetchDocument = useCallback(async () => {
     try {
       const doc = await getDocumentById(id!);
       setDocument(doc);
@@ -29,7 +23,13 @@ const DocumentDetail: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id, navigate]);
+
+  useEffect(() => {
+    if (id) {
+      fetchDocument();
+    }
+  }, [id, fetchDocument]);
 
   const handleDownload = async () => {
     if (!document) return;
