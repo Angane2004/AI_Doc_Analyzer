@@ -30,7 +30,6 @@ const DocumentList: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    filterDocuments();
   }, [documents, searchTerm, riskFilter, typeFilter]);
 
   const fetchDocuments = async () => {
@@ -54,10 +53,9 @@ const DocumentList: React.FC = () => {
     }
   };
 
-  const filterDocuments = () => {
+  useEffect(() => {
     let filtered = documents;
 
-    // Search filter
     if (searchTerm) {
       filtered = filtered.filter(doc =>
         doc.originalName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -65,18 +63,17 @@ const DocumentList: React.FC = () => {
       );
     }
 
-    // Risk filter
     if (riskFilter !== 'all') {
       filtered = filtered.filter(doc => doc.analysis.risks.riskLevel === riskFilter);
     }
 
-    // Type filter
     if (typeFilter !== 'all') {
       filtered = filtered.filter(doc => doc.analysis.documentType === typeFilter);
     }
 
     setFilteredDocuments(filtered);
-  };
+  }, [documents, searchTerm, riskFilter, typeFilter]); // All direct dependencies
+
 
   const handleDelete = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this document?')) {
