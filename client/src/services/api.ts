@@ -7,7 +7,7 @@ import {
   ApiError 
 } from '../types';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://ai-doc-analyzer-3vd2.onrender.com';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 // Create axios instance
 const api = axios.create({
