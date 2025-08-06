@@ -27,8 +27,11 @@
     { "src": "/blog", "headers": { "Cache-Control": "max-age=3600" } }
   ],
 
+  
+  "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/old", "destination": "/new" }
   ]
 
 }
