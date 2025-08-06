@@ -80,8 +80,11 @@ export const getDocumentById = async (id: string): Promise<Document> => {
   return response.data.document;
 };
 
-export const deleteDocument = async (id: string): Promise<void> => {
-  await api.delete(`/documents/${id}`);
+export const deleteDocument = async (id: string) => {
+  const response = await fetch(`${API_BASE_URL}/documents/${id}`, {
+    method: 'DELETE'
+  });
+  if (!response.ok) throw new Error('Failed to delete document');
 };
 
 export const getDocumentStats = async (): Promise<DocumentStats> => {
