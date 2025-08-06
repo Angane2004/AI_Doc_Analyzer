@@ -103,3 +103,7 @@ The application will be available at:
 ## License
 
 MIT License - see LICENSE file for details 
+
+## Deployed on Netlify
+
+https://lustrous-meringue-47884c.netlify.app/

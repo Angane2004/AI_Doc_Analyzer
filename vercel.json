@@ -22,12 +22,18 @@
     {
       "src": "/(.*)",
       "dest": "client/build/index.html"
-    }
+    },
+    { "src": "/old", "dest": "/new" },
+    { "src": "/blog", "headers": { "Cache-Control": "max-age=3600" } }
   ],
-  "rewrites": [
+  
+  "rewrites": [{ "source": "/old", "destination": "/new" }],
+  "headers": [
     {
-      "source": "/(.*)",
-      "destination": "client/build/index.html"
+      "source": "/blog",
+      "headers": [
+        { "key": "Cache-Control", "value": "max-age=3600" }
+      ]
     }
   ]
 }
