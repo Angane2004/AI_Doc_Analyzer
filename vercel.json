@@ -26,14 +26,9 @@
     { "src": "/old", "dest": "/new" },
     { "src": "/blog", "headers": { "Cache-Control": "max-age=3600" } }
   ],
-  
-  "rewrites": [{ "source": "/old", "destination": "/new" }],
-  "headers": [
-    {
-      "source": "/blog",
-      "headers": [
-        { "key": "Cache-Control", "value": "max-age=3600" }
-      ]
-    }
+
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
+
 }
