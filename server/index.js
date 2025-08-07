@@ -25,11 +25,9 @@ app.use('/api/upload', uploadRoutes);
 app.use('/api/documents', documentRoutes);
 app.use('/api/analysis', analysisRoutes);
 
-// Health check endpoint
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'AI Legal Document Analyzer API is running' });
+app.get('/api', (req, res) => {
+  res.send('API route is working!');
 });
-
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
