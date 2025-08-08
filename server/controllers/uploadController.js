@@ -1,14 +1,6 @@
 const DocumentService = require('../services/documentService');
 const NLPService = require('../services/nlpService');
 const { createDocument } = require('../models/documentModel');
-const cloudinary = require('cloudinary').v2; // Assuming you've installed cloudinary
-
-// Configure Cloudinary with your credentials
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-});
 
 const uploadController = {
   async uploadAndAnalyze(req, res) {
@@ -17,24 +9,9 @@ const uploadController = {
         return res.status(400).json({ error: 'No file uploaded' });
       }
 
-      const { originalname, buffer, size } = req.file;
+      const { originalname, filename, path: filePath } = req.file;
       
-      // Upload the file buffer to Cloudinary
-      const uploadResult = await new Promise((resolve, reject) => {
-        cloudinary.uploader.upload_stream(
-          { resource_type: 'raw', folder: 'documents' }, // Set resource_type to 'raw' for non-image files
-          (error, uploadResult) => {
-            if (error) return reject(error);
-            resolve(uploadResult);
-          }
-        ).end(buffer);
-      });
-
-      // The URL and public ID of the file from Cloudinary
-      const filePath = uploadResult.secure_url;
-      const publicId = uploadResult.public_id;
-      
-      // Extract text from document using the new file path (URL)
+      // Extract text from document
       const documentService = new DocumentService();
       const extractedText = await documentService.extractText(filePath, originalname);
       
@@ -48,14 +25,14 @@ const uploadController = {
 
       // Save to database
       const documentData = {
-        id: publicId,
+        id: req.file.filename.split('-')[0],
         originalName: originalname,
-        fileName: publicId, // Use publicId as the file name
+        fileName: filename,
         filePath: filePath,
         textContent: extractedText,
         analysis: analysis,
         uploadDate: new Date(),
-        fileSize: size
+        fileSize: req.file.size
       };
 
       const savedDocument = await createDocument(documentData);
@@ -75,9 +52,74 @@ const uploadController = {
   },
 
   async uploadMultiple(req, res) {
-    // ... (This function needs a similar update to handle cloud uploads)
-    res.status(501).json({ error: 'This endpoint is not yet updated for cloud storage.' });
+    try {
+      if (!req.files || req.files.length === 0) {
+        return res.status(400).json({ error: 'No files uploaded' });
+      }
+
+      const documentService = new DocumentService();
+      const nlpService = new NLPService();
+      const results = [];
+
+      for (const file of req.files) {
+        try {
+          // Extract text
+          const extractedText = await documentService.extractText(file.path, file.originalname);
+          
+          if (!extractedText || extractedText.trim().length === 0) {
+            results.push({
+              file: file.originalname,
+              success: false,
+              error: 'Could not extract text'
+            });
+            continue;
+          }
+
+          // Analyze
+          const analysis = await nlpService.analyzeDocument(extractedText);
+
+          // Save
+          const documentData = {
+            id: file.filename.split('-')[0],
+            originalName: file.originalname,
+            fileName: file.filename,
+            filePath: file.path,
+            textContent: extractedText,
+            analysis: analysis,
+            uploadDate: new Date(),
+            fileSize: file.size
+          };
+
+          const savedDocument = await createDocument(documentData);
+          
+          results.push({
+            file: file.originalname,
+            success: true,
+            document: savedDocument
+          });
+
+        } catch (error) {
+          results.push({
+            file: file.originalname,
+            success: false,
+            error: error.message
+          });
+        }
+      }
+
+      res.status(200).json({
+        message: 'Multiple documents processed',
+        results: results
+      });
+
+    } catch (error) {
+      console.error('Multiple upload error:', error);
+      res.status(500).json({ 
+        error: 'Failed to process multiple documents',
+        message: error.message 
+      });
+    }
   }
 };
 
-module.exports = uploadController;
+module.exports = uploadController; 
