@@ -9,7 +9,8 @@
     "client": "cd client && npm start",
     "build": "react-scripts build --prefix ./client",
     "install-all": "npm install",
-    "start": "node server/index.js"
+    "start": "node server/index.js",
+    "build-pages": "cd client && npm install && npm run build"
   },
   "dependencies": {
     "axios": "^1.6.2",
