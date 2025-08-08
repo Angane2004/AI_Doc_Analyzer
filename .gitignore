@@ -15,10 +15,10 @@ yarn-error.log*
 database/*.db
 database/*.sqlite
 
-# Uploads
-uploads/
-*.pdf
-*.docx
+# # Uploads
+# uploads/
+# *.pdf
+# *.docx
 
 # Build outputs
 client/build/
